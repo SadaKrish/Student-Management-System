@@ -4,11 +4,9 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2 class="text-center">Teachers</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
@@ -59,11 +57,14 @@
             @Html.DisplayFor(modelItem => item.Enable)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TeacherID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TeacherID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TeacherID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.TeacherID }, new { @class = "btn btn-outline-secondary" }) 
+            @Html.ActionLink("Details", "Details", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary"}) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.TeacherID }, new { @class = "btn btn-outline-secondary" })
         </td>
     </tr>
 }
 
 </table>
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn bg-secondary text-light" })
+</p>

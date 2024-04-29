@@ -6,10 +6,7 @@
 
 <h2 class="text-center">Students</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn bg-secondary text-light" })
 
-</p>
 <table class="table">
     <tr>
         <th>
@@ -60,11 +57,15 @@
             @Html.DisplayFor(modelItem => item.Enable)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StdID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StdID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.StdID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.StdID }, new { @class = "btn btn-outline-secondary" }) 
+            @Html.ActionLink("Details", "Details", new { id=item.StdID }, new { @class = "btn btn-outline-secondary" }) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.StdID }, new { @class = "btn btn-outline-secondary" })
         </td>
     </tr>
 }
 
 </table>
+<p class="align-content-end">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn bg-secondary text-light" })
+
+</p>
