@@ -66,6 +66,29 @@
 
 </table>
 <p class="align-content-end">
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn bg-secondary text-light" })
-
+    @*@Html.ActionLink("Create New", "Create", null, new { @})*@
+    <button onclick="LoadCreatePage()" class= "btn bg-secondary text-light" >Create New</button>
 </p>
+<div id="createnew">
+
+</div>
+<script>
+    function LoadCreatePage() {
+        $.ajax({
+            type: "GET",
+           url: "@Url.Action("Create", "Students")",
+
+            data: {},
+            cache: false,
+            async: false,
+
+            success: function (data) {
+                $("#createnew").html(data)
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                aler('');
+            }
+        })
+
+    }
+</script>

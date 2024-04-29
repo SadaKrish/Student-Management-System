@@ -38,7 +38,7 @@ namespace sms.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView("_CreateNewPartial");
         }
 
         // POST: Students/Create

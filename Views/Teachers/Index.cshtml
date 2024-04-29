@@ -33,38 +33,62 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Gender)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DOB)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ContactNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Enable)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TeacherID }, new { @class = "btn btn-outline-secondary" }) 
-            @Html.ActionLink("Details", "Details", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary"}) 
-            @Html.ActionLink("Delete", "Delete", new { id=item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enable)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
+                @Html.ActionLink("Details", "Details", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
+            </td>
+        </tr>
+    }
 
 </table>
-<p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn bg-secondary text-light" })
+<p class="align-content-end">
+    <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
 </p>
+<div id="createnew">
+
+</div>
+<script>
+    function LoadCreatePage() {
+        $.ajax({
+            type: "GET",
+           url: "@Url.Action("Create", "Teachers")",
+
+            data: {},
+            cache: false,
+            async: false,
+
+            success: function (data) {
+                $("#createnew").html(data)
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                aler('');
+            }
+        })
+
+    }
+</script>
