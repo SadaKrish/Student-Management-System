@@ -5,75 +5,20 @@
 }
 
 <h2 class="text-center">Teachers</h2>
-
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Gender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DOB)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ContactNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Enable)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DOB)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enable)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Details", "Details", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Delete", "Delete", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-            </td>
-        </tr>
-    }
-
-</table>
 <p class="align-content-end">
     <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
 </p>
+<div id="teacherList">
+    @Html.Partial("_TeacherList")
+</div>
+
 <div id="createnew">
 
 </div>
+
 <script>
     function LoadCreatePage() {
+        $("#teacherList").hide();
         $.ajax({
             type: "GET",
            url: "@Url.Action("Create", "Teachers")",
@@ -91,4 +36,9 @@
         })
 
     }
+
+    
+    
+
 </script>
+

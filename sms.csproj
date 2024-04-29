@@ -260,6 +260,9 @@
     <Content Include="Views\Students\_CreateNewPartial.cshtml" />
     <Content Include="Views\Subjects\_CreateNew.cshtml" />
     <Content Include="Views\Teachers\_CreateNew.cshtml" />
+    <Content Include="Views\Students\_StudentList.cshtml" />
+    <Content Include="Views\Teachers\_TeacherList.cshtml" />
+    <Content Include="Views\Subjects\_SubjectList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

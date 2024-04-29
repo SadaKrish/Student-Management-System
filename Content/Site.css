@@ -3,6 +3,7 @@
     margin-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
+ 
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -29,4 +30,10 @@ th {
     text-decoration: none;
     display: inline-block;
     border-radius: 5px;
+}
+footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    margin-top:10px;
 }

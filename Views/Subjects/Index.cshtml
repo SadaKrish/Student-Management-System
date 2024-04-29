@@ -5,44 +5,19 @@
 }
 <h2 class="text-center">Subjects</h2>
 
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Enable)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enable)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Sub_code }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Details", "Details", new { id = item.Sub_code }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Delete", "Delete", new { id = item.Sub_code }, new { @class = "btn btn-outline-secondary" })
-            </td>
-        </tr>
-    }
-
-</table>
 <p class="align-content-end">
     <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
 </p>
+
+<div id="subjectList">
+    @Html.Partial("_SubjectList")
+</div>
 <div id="createnew">
 
 </div>
 <script>
     function LoadCreatePage() {
+        $("#subjectList").hide();
         $.ajax({
             type: "GET",
            url: "@Url.Action("Create", "Subjects")",

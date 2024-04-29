@@ -1,0 +1,49 @@
+﻿@model IEnumerable<sms.Models.Subject>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Enable)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enable)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Sub_code }, new { @class = "btn btn-outline-secondary" })
+                @Html.ActionLink("Details", "Details", new { id = item.Sub_code }, new { @class = "btn btn-outline-secondary" })
+                <button class="btn btn-danger" onclick="confirmDelete('@item.Sub_code')">Delete</button>
+            </td>
+        </tr>
+    }
+
+</table>
+<script>
+    function confirmDelete(teacherId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this teacher!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms deletion, redirect to delete action
+                window.location.href = '@Url.Action("Delete", "Teachers")/' + teacherId;
+            }
+        });
+    }
+</script>
+
