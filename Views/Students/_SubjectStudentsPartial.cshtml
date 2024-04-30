@@ -1,0 +1,40 @@
+﻿@model IEnumerable<sms.Models.Subject>
+
+@{
+    ViewBag.Title = "StudentsSubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // If you have a shared layout file
+}
+
+<h2>Subjects for Student</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subject Code</th>
+                <th>Name</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subject in Model)
+            {
+                <tr>
+                    <td>@subject.Sub_code</td>
+                    <td>@subject.Name</td>
+                    <!-- Add more columns as needed -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No subjects found for this student.</p>
+}
+
+@Html.ActionLink("Back to Student list", "Index", "Students", new { id = ViewBag.StudentId }, new { @class = "btn btn-primary" })
+
+@*//STudent Teachers*@
+

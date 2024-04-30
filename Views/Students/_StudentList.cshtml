@@ -3,10 +3,11 @@
     ViewBag.Title = "Index";
 }
 
-
-
-<table class="table">
+<table class="table" id="student-list">
     <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StdID)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.FirstName)
         </th>
@@ -35,6 +36,9 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.StdID)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
@@ -59,16 +63,41 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.StdID }, new { @class = "btn btn-outline-secondary" })
                 @Html.ActionLink("Details", "Details", new { id = item.StdID }, new { @class = "btn btn-outline-secondary" })
                 <button class="btn btn-danger" onclick="confirmDelete('@item.StdID')">Delete</button>
+                <button onclick="LoadDetailsPage('@item.StdID')" class="btn bg-secondary text-light">More Details</button>
+                @Html.ActionLink("More Details", "StudentDetails", new { id = item.StdID }, new { @class = "btn btn-outline-secondary" })
             </td>
         </tr>
     }
-
 </table>
+
+
+
+<div id="details">
+
+</div>
+
 <script>
-    function confirmDelete(teacherId) {
+    function LoadDetailsPage() {
+        // Make AJAX request to load the student details partial view
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("StudentDetails", "Students")", // Replace with your controller action URL
+            data: {}, // You can pass any additional data here if required
+            cache: false,
+            success: function (data) {
+                // Show student details in a modal or popup
+                $('#details').html(data).modal('show');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Error loading student details.');
+            }
+        });
+    }
+
+    function confirmDelete(studentId) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You will not be able to recover this teacher!',
+            text: 'You will not be able to recover this student!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -77,9 +106,8 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // If user confirms deletion, redirect to delete action
-                window.location.href = '@Url.Action("Delete", "Teachers")/' + teacherId;
+                window.location.href = '@Url.Action("DeleteConfirmed", "Students")/' + studentId;
             }
         });
     }
 </script>
-

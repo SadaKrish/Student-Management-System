@@ -11,7 +11,8 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Subject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,8 +21,10 @@ namespace sms.Models
             this.Students = new HashSet<Student>();
             this.Teachers = new HashSet<Teacher>();
         }
-    
+
+        [Required(), Display(Name = "Subject Code")]
         public string Sub_code { get; set; }
+        [Required(),Display(Name = "Name")]
         public string Name { get; set; }
         public Nullable<bool> Enable { get; set; }
     

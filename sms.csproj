@@ -137,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -240,9 +241,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Students\Create.cshtml" />
     <Content Include="Views\Students\Delete.cshtml" />
-    <Content Include="Views\Students\Details.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
     <Content Include="Views\Students\Index.cshtml" />
     <Content Include="Views\Teachers\Create.cshtml" />
@@ -263,6 +262,11 @@
     <Content Include="Views\Students\_StudentList.cshtml" />
     <Content Include="Views\Teachers\_TeacherList.cshtml" />
     <Content Include="Views\Subjects\_SubjectList.cshtml" />
+    <Content Include="Views\Students\_EditPartial.cshtml" />
+    <Content Include="Views\Students\_TeacherStudentsPartial.cshtml" />
+    <Content Include="Views\Students\_SubjectStudentsPartial.cshtml" />
+    <Content Include="Views\Students\_TeacherSubjects.cshtml" />
+    <Content Include="Views\Students\_StudentDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

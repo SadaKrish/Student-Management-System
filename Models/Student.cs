@@ -23,6 +23,8 @@ namespace sms.Models
         }
 
         [Required(), Display(Name = "Student ID")]
+        [Key]
+
         public string StdID { get; set; }
         [Required(ErrorMessage = "First name field is required"), Display(Name = "First Name")]
         public string FirstName { get; set; }

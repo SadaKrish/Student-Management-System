@@ -3,15 +3,85 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2 class="text-center">Students</h2>
-<p class="align-content-end">
+
+<p class="align-content-end" id="button">
 
     <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
 </p>
 <!-- Student List Partial View -->
 <div id="student-list">
-        @Html.Partial("_StudentList")
- </div>
+    <table class="table">
+
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StdID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DOB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enable)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StdID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DOB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enable)
+                </td>
+                <td>
+                    <button onclick="LoadEditPage('@item.StdID')" class="btn bg-secondary text-light">Edit</button>
+                    <button class="btn btn-danger" onclick="confirmDelete('@item.StdID')">Delete</button>
+                    <button onclick="LoadDetailsPage('@item.StdID')" class="btn bg-secondary text-light">More Details</button>
+                    
+
+
+                </td>
+            </tr>
+        }
+        @*@Html.Partial("_StudentList")*@
+    </table>
+</div>
+
+
 <!--Create form partial view-->
 
 <div id="createnew">
@@ -21,6 +91,7 @@
     function LoadCreatePage() {
         //* /Hide student list and load create new form*/
         $("#student-list").hide();
+
         $.ajax({
             type: "GET",
            url: "@Url.Action("Create", "Students")",
@@ -38,4 +109,48 @@
         })
 
     }
+
+    function LoadDetailsPage(studentId) {
+    // Hide student list and button
+    $("#student-list").hide();
+    $('#button').hide();
+
+    $.ajax({
+        type: "GET",
+        url: "@Url.Action("StudentDetails", "Students")",
+        data: { id: studentId }, // Pass studentId as data
+        cache: false,
+        success: function (data) {
+            // Load create new form with student details
+            $("#createnew").html(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert('Error loading student details.');
+        }
+    });
+    }
+    function LoadEditPage(studentId) {
+        // Hide student list and button
+        $("#student-list").hide();
+        $('#button').hide();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Edit", "Students")",
+            data: { id: studentId }, // Pass studentId as data
+            cache: false,
+            success: function (data) {
+                // Load create new form with student details
+                $("#createnew").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Error loading student details.');
+            }
+        });
+}
+
+
+
+
+
 </script>

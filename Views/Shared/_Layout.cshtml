@@ -9,7 +9,19 @@
 </head>
 <body>
     @Html.Partial("_Header")
-    <div class="container body-content">
+    <!--<ul class="nav">
+        <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link", id = "home-link" })</li>
+        <li>@Html.ActionLink("Student", "Index", "Students", new { area = "" }, new { @class = "nav-link", id = "student-link" })</li>
+        <li>@Html.ActionLink("Teacher", "Index", "Teachers", new { area = "" }, new { @class = "nav-link", id = "teacher-link" })</li>
+        <li>@Html.ActionLink("Subject", "Index", "Subjects", new { area = "" }, new { @class = "nav-link", id = "subject-link" })</li>-->
+        <!-- Add more navigation links as needed -->
+    <!--</ul>-->
+
+    
+
+
+
+    <div class="container body-content contentContainer content">
         @RenderBody()
         <hr />
 
@@ -21,5 +33,48 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Initially load the default content
+        loadContent('@Url.Action("Index", "Home")');
+
+        // Handle clicks on navigation links
+        $('#home-link').click(function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            loadContent('@Url.Action("Index", "Home")');
+        });
+        $('#student-link').click(function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            loadContent('@Url.Action("Index", "Students")');
+        });
+
+        $('#teacher-link').click(function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            loadContent('@Url.Action("Index", "Teachers")');
+        });
+        $('#subject-link').click(function(e) {
+            e.preventDefault(); // Prevent default link behavior
+            loadContent('@Url.Action("Index", "Subjects")');
+});
+
+        // Add more event handlers for other navigation links
+    });
+
+    function loadContent(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                $('#content').html(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading content:', error);
+            }
+        });
+    }
+    </script>*@
+
 </body>
 </html>

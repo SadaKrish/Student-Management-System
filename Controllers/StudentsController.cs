@@ -32,7 +32,7 @@ namespace sms.Controllers
             {
                 return HttpNotFound();
             }
-            return View(student);
+            return PartialView("_DetailsPartial");
         }
 
         // GET: Students/Create
@@ -70,7 +70,7 @@ namespace sms.Controllers
             {
                 return HttpNotFound();
             }
-            return View(student);
+            return PartialView("EditPartial");
         }
 
         // POST: Students/Edit/5
@@ -86,7 +86,7 @@ namespace sms.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(student);
+            return PartialView("_EditPartial");
         }
 
         // GET: Students/Delete/5
@@ -123,5 +123,41 @@ namespace sms.Controllers
             }
             base.Dispose(disposing);
         }
+        //public ActionResult StudentsSubjects(string id)
+        //{
+        //    var student = db.Students.Include(s => s.Subjects).FirstOrDefault(s => s.StdID == id);
+        //    var subject = student != null ? student.Subjects : new List<Subject>();
+        //    return View(subject);
+        //}
+
+        //public ActionResult Teachers(string id)
+        //{
+        //    var studentTeachers = db.StudentTeachers
+        //        .Include(st => st.Teacher)
+        //        .Where(st => st.StudentId == id)
+        //        .Select(st => st.Teacher)
+        //        .ToList();
+
+        //    return View(studentTeachers);
+        //}
+        public ActionResult StudentDetails(string id)
+        {
+            // Retrieve the student with the specified ID including related teachers and subjects
+            var student = db.Students
+                            .Include(s => s.Teachers)
+                            .Include(s => s.Subjects)
+                            .FirstOrDefault(s => s.StdID == id);
+
+            if (student == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView("_StudentDetails", student);
+            //return View(student);
+        }
+
+
+
     }
 }
