@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -20,30 +21,13 @@ namespace sms.Controllers
             return View(db.Students.ToList());
         }
 
-        // GET: Students/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView("_DetailsPartial");
-        }
-
         // GET: Students/Create
         public ActionResult Create()
         {
             return PartialView("_CreateNewPartial");
         }
 
-        // POST: Students/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StdID,FirstName,LastName,Gender,DOB,Address,ContactNo,Enable")] Student student)
@@ -56,6 +40,11 @@ namespace sms.Controllers
             }
 
             return View(student);
+        }
+        public JsonResult IsStdIDAvailable(string stdID)
+        {
+            bool isAvailable = !db.Students.Any(s => s.StdID == stdID);
+            return Json(isAvailable, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Students/Edit/5
@@ -70,7 +59,7 @@ namespace sms.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView("EditPartial");
+            return PartialView("_EditPartial",student);
         }
 
         // POST: Students/Edit/5
@@ -86,34 +75,69 @@ namespace sms.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return PartialView("_EditPartial");
-        }
-
-        // GET: Students/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
-            return View(student);
+            return PartialView("_EditPartial",student);
         }
 
         // POST: Students/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //public ActionResult Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Student student = db.Students.Find(id);
+        //    if (student == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return PartialView("_DeletePartial", student);
+        //}
+
+        // POST: Students/Delete/5
+        
         public ActionResult DeleteConfirmed(string id)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Student student = db.Students.Find(id);
+                if (student == null)
+                {
+                    return Json(new { success = false, message = "Student not found." });
+                }
+
+                db.Students.Remove(student);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Student deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred while deleting the student: " + ex.Message });
+            }
         }
+
+        [HttpPost]
+        public ActionResult ToggleEnable(string id, bool enable)
+        {
+            try
+            {
+                var student = db.Students.Find(id);
+                if (student == null)
+                {
+                    return Json(new { success = false, message = "Student not found." });
+                }
+
+                student.Enable = enable;
+                db.SaveChanges();
+
+                return Json(new { success = true, message = enable ? "Student enabled successfully." : "Student disabled successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -123,23 +147,6 @@ namespace sms.Controllers
             }
             base.Dispose(disposing);
         }
-        //public ActionResult StudentsSubjects(string id)
-        //{
-        //    var student = db.Students.Include(s => s.Subjects).FirstOrDefault(s => s.StdID == id);
-        //    var subject = student != null ? student.Subjects : new List<Subject>();
-        //    return View(subject);
-        //}
-
-        //public ActionResult Teachers(string id)
-        //{
-        //    var studentTeachers = db.StudentTeachers
-        //        .Include(st => st.Teacher)
-        //        .Where(st => st.StudentId == id)
-        //        .Select(st => st.Teacher)
-        //        .ToList();
-
-        //    return View(studentTeachers);
-        //}
         public ActionResult StudentDetails(string id)
         {
             // Retrieve the student with the specified ID including related teachers and subjects
@@ -157,7 +164,8 @@ namespace sms.Controllers
             //return View(student);
         }
 
-
+        //validation check for id
+       
 
     }
 }

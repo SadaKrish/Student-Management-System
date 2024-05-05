@@ -1,0 +1,47 @@
+﻿@model List<sms.Models.Student>
+@{
+    ViewBag.Title = "AllocatedStudents";
+}
+
+<table class="table table-bordered" style="background-color: #f8f9fa; color: #343a40;">
+    <thead>
+        <tr style="background-color: #343a40; color: #ffffff;">
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Assigned Teacher & Subject</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StdID</td>
+                <td>@student.FirstName @student.LastName</td>
+                <td>
+                    @foreach (var subject in student.Subjects)
+                    {
+                        foreach (var teacher in subject.Teachers)
+                        {
+                            <div>
+                                <span><strong>Teacher:</strong> @teacher.FirstName @teacher.LastName</span>
+                                <span><strong>Subject:</strong> @subject.Name</span><br /><br />
+                            </div>
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach (var subject in student.Subjects)
+                    {
+                        foreach (var teacher in subject.Teachers)
+                        {
+                            <button class="btn btn-danger removeStudent p-1" data-student-id="@student.StdID" data-subject-code="@subject.Sub_code" data-teacher-id="@teacher.TeacherID"><i class="bi bi-trash small-icons" style="color: red;"></i></button>
+                            <br /><br />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

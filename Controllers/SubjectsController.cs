@@ -70,7 +70,7 @@ namespace sms.Controllers
             {
                 return HttpNotFound();
             }
-            return View(subject);
+            return PartialView("_EditPartial",subject);
         }
 
         // POST: Subjects/Edit/5
@@ -90,31 +90,56 @@ namespace sms.Controllers
         }
 
         // GET: Subjects/Delete/5
-        public ActionResult Delete(string id)
+        // GET: Students/Delete/5
+
+         public ActionResult Delete(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                // Find the student with the given ID
+                var subject = db.Subjects.Find(id);
+
+                if (subject == null)
+                {
+                    // Return error response if student not found
+                    return Json(new { success = false, message = "Subject not found." });
+                }
+
+                // Remove the student from the database
+                db.Subjects.Remove(subject);
+                db.SaveChanges();
+
+                // Return success response
+                return Json(new { success = true, message = "Subject deleted successfully." });
             }
-            Subject subject = db.Subjects.Find(id);
-            if (subject == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                // Return error response if an exception occurs
+                return Json(new { success = false, message = "An error occurred while deleting the subject." });
             }
-            return View(subject);
         }
 
-        // POST: Subjects/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        [HttpPost]
+        public ActionResult ToggleEnable(string id, bool enable)
         {
-            Subject subject = db.Subjects.Find(id);
-            db.Subjects.Remove(subject);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            try
+            {
+                var subject = db.Subjects.Find(id);
+                if (subject == null)
+                {
+                    return Json(new { success = false, message = "Subject not found." });
+                }
 
+                subject.Enable = enable;
+                db.SaveChanges();
+
+                return Json(new { success = true, message = enable ? "Subject enabled successfully." : "Subject disabled successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -123,5 +148,23 @@ namespace sms.Controllers
             }
             base.Dispose(disposing);
         }
+        //subhect details
+        public ActionResult SubjectDetails(string id)
+        {
+            // Retrieve the subject with the specified ID including related students and teachers
+            var subject = db.Subjects
+                            .Include(s => s.Students)
+                            .Include(s => s.Teachers)
+                            .FirstOrDefault(s => s.Sub_code == id);
+
+            if (subject == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView("_SubjectDetails", subject);
+            // Or return View(subject) if you want to return a full view instead of a partial view
+        }
+        
     }
 }

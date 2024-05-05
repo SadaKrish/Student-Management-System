@@ -11,6 +11,7 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public partial class Teacher
@@ -29,14 +30,17 @@ namespace sms.Models
         public string LastName { get; set; }
         [Required(), Display(Name = "Gender")]
         public string Gender { get; set; }
-        [Display(Name = "Date of Birth")]
+        
         public Nullable<System.DateTime> DOB { get; set; }
         [Display(Name = "Address")]
         public string Address { get; set; }
         [Display(Name = "Contact No")]
         public Nullable<int> ContactNo { get; set; }
-        public Nullable<bool> Enable { get; set; }
-    
+
+        [Required(ErrorMessage = "Enable is required")]
+        [DisplayName("Enable")]
+        public bool Enable { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

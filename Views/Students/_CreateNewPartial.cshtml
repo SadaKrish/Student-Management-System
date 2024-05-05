@@ -4,7 +4,15 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+
+<style>
+    .required::after {
+        content: '*';
+        color: red;
+        margin-left: 5px; /* Adjust spacing as needed */
+    }
+</style>
+
 
 
 @using (Html.BeginForm())
@@ -12,19 +20,20 @@
     @Html.AntiForgeryToken()
 
 <div class="form-horizontal">
-    <h4>Student</h4>
+    <h4>Add a new Student</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.StdID, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.StdID, htmlAttributes: new { @class = "control-label col-md-2 required" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.StdID, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.StdID, "", new { @class = "text-danger" })
+            <span id="stdIDExistsMessage" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2 required" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
@@ -32,7 +41,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2 required" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
@@ -56,10 +65,12 @@
     <div class="form-group">
         @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.TextBoxFor(model => model.DOB, "{0:yyyy-MM-dd}", new { @class = "form-control", placeholder = "YYYY-MM-DD", id = "DOB" })
             @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
         </div>
     </div>
+
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -76,30 +87,111 @@
             @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Enable, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.Enable)
-                @Html.ValidationMessageFor(model => model.Enable, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.Enable, new { @class = "form-check-input" })
+        <label class="form-check-label" for="Enable">
+            Enable
+        </label>
     </div>
 
-    <div class="form-group">
+
+    @*@Html.HiddenFor(model => model.Enable, new { id = "EnableHidden" })*@
+
+
+    <div class="form-group d-inline-flex">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-default" />
         </div>
+
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index", new {@class="p-2"})
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
 }
+
+<script>
+    //datepicker
+    $(document).ready(function () {
+        $('#DOB').datepicker({
+            dateFormat: 'yy-mm-dd', // Set desired date format
+            changeYear: true, // Enable year dropdown
+            changeMonth: true, // Enable month dropdown
+            yearRange: "-100:+0" // Set year range from 100 years ago to current year
+        });
+    });
+
+    function toggleEnable(id, enable) {
+        $.ajax({
+            url: '/Students/ToggleEnable',
+            type: 'POST',
+            data: { id: id, enable: enable },
+            success: function (response) {
+                if (response.success) {
+                    loadData();
+                    Swal.fire('Success!', response.message, 'success');
+                } else {
+                    Swal.fire('Error!', response.message, 'error');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                Swal.fire('Error!', 'An error occurred while toggling student enable status.', 'error');
+            }
+        });
+    }
+
+        @*$(document).ready(function () {
+            // Function to load the index page via AJAX
+            function loadIndexPage() {
+                $.ajax({
+                    url: '@Url.Action("Index", "Students")',
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the container element with the response data
+                        $('#list-container').html(data);
+                    },
+                    error: function () {
+                        // Handle error if AJAX call fails
+                        console.error('Failed to load list.');
+                    }
+                });
+            }
+
+            // Attach click event handler to the load list button
+            $('#load-list').click(loadIndexPage);
+
+            // Attach click event handler to the back-to-list button
+            $('#back-to-list').click(loadIndexPage);
+        });*@
+
+    //validation check for id
+            $(document).ready(function () {
+    $('#StdID').change(function () {
+        var studentId = $(this).val();
+        if (studentId) {
+            $.ajax({
+                url: '@Url.Action("CheckStudentIDExists", "Students")',
+                type: 'GET',
+                data: { studentID: studentId },
+                success: function (response) {
+                    if (response.exists) {
+                        $('#StdID').addClass('input-validation-error');
+                        $('#StdID-error').text('Student ID already exists.');
+                    } else {
+                        $('#StdID').removeClass('input-validation-error');
+                        $('#StdID-error').text('');
+                    }
+                }
+            });
+        }
+    });
+});
+
+
+</script>
 

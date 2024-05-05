@@ -15,7 +15,7 @@
         @foreach (var teacher in Model.Teachers)
         {
             <li>@teacher.FirstName @teacher.LastName</li>
-            <ul>
+             <ul>
                 @foreach (var subject in teacher.Subjects)
                 {
                     <li>@subject.Name</li>
@@ -25,4 +25,30 @@
     </ul>
 </div>
 
-    @Html.ActionLink("Back to Student list", "Index", "Students", new { id = ViewBag.StudentId }, new { @class = "btn btn-primary" })
+
+
+
+@Html.ActionLink("Back to Student list", "Index", "Students", new { id = ViewBag.StudentId }, new { @class = "btn bg-secondary text-light m-3" })
+
+<script>
+    function displayStudentDetails() {
+        var selectedStudentId = $("#SelectedStudentId").val();
+
+        // Perform AJAX request to fetch student details based on the selected ID
+        $.ajax({
+            url: '@Url.Action("GetStudentDetails", "YourControllerName")', // Replace YourControllerName with the actual name of your controller
+            type: 'GET',
+            data: { studentId: selectedStudentId },
+            success: function (data) {
+                // Handle successful response
+                // Display the details of the selected student using data received from the server
+                // For example:
+                $("#studentDetailsContainer").html(data);
+            },
+            error: function () {
+                // Handle error
+                console.error('Error fetching student details');
+            }
+        });
+    }
+</script>

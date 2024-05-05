@@ -18,6 +18,11 @@ namespace sms
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+       //     routes.MapRoute(
+       //    name: "Delete",
+       //    url: "Students/Delete/{id}",
+       //    defaults: new { controller = "Students", action = "Delete" }
+       //);
         }
     }
 }

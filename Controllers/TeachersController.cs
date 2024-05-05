@@ -70,7 +70,7 @@ namespace sms.Controllers
             {
                 return HttpNotFound();
             }
-            return View(teacher);
+            return PartialView("_EditPartial",teacher);
         }
 
         // POST: Teachers/Edit/5
@@ -86,35 +86,58 @@ namespace sms.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(teacher);
+            return PartialView("_EditPartial",teacher);
         }
 
         // GET: Teachers/Delete/5
         public ActionResult Delete(string id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Teacher teacher = db.Teachers.Find(id);
-            if (teacher == null)
-            {
-                return HttpNotFound();
-            }
-            return View(teacher);
-        }
+                // Find the student with the given ID
+                var teacher = db.Teachers.Find(id);
 
-        // POST: Teachers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+                if (teacher == null)
+                {
+                    // Return error response if student not found
+                    return Json(new { success = false, message = "Teacher not found." });
+                }
+
+                // Remove the student from the database
+                db.Teachers.Remove(teacher);
+                db.SaveChanges();
+
+                // Return success response
+                return Json(new { success = true, message = "Teacher deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                // Return error response if an exception occurs
+                return Json(new { success = false, message = "An error occurred while deleting the teacher." });
+            }
+        }
+        //check box
+        [HttpPost]
+        public ActionResult ToggleEnable(string id, bool enable)
         {
-            Teacher teacher = db.Teachers.Find(id);
-            db.Teachers.Remove(teacher);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            try
+            {
+                var teacher = db.Teachers.Find(id);
+                if (teacher == null)
+                {
+                    return Json(new { success = false, message = "Teacher not found." });
+                }
 
+                teacher.Enable = enable;
+                db.SaveChanges();
+
+                return Json(new { success = true, message = enable ? "Teacher enabled successfully." : "Teacher disabled successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -122,6 +145,23 @@ namespace sms.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult TeacherDetails(string id)
+        {
+            // Retrieve the student with the specified ID including related teachers and subjects
+            var teacher = db.Teachers
+                            .Include(s => s.Students)
+                            .Include(s => s.Subjects)
+                            .FirstOrDefault(s => s.TeacherID == id);
+
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView("_TeacherDetails", teacher);
+            //return View(student);
         }
     }
 }

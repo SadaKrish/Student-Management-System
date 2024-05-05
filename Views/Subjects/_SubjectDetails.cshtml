@@ -1,0 +1,32 @@
+﻿
+@model sms.Models.Subject
+@{
+    ViewBag.Title = "SubjectDetails";
+}
+
+<!-- Display student information -->
+
+
+<div id="details">
+    <h2>Subject Details</h2>
+    <p>Subject ID: @Model.Sub_code</p>
+    <p>Name: @Model.Name</p>
+
+    <!-- Display associated teachers -->
+    <h3>Teachers</h3>
+    <ul>
+        @foreach (var teacher in Model.Teachers)
+        {
+            <li>@teacher.FirstName @teacher.LastName</li>
+            <!-- Display associated students for this teacher and subject -->
+            <ul>
+                @foreach (var student in teacher.Students)
+                {
+                    <li>@student.FirstName @student.LastName</li>
+                }
+            </ul>
+        }
+    </ul>
+</div>
+
+@Html.ActionLink("Back to Student list", "Index", "Subjects", new { id = ViewBag.StudentId }, new { @class = "btn bg-secondary text-light" })

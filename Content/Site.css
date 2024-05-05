@@ -37,3 +37,34 @@ footer {
     width:100%;
     margin-top:10px;
 }
+.delete-btn {
+    border:none;
+    background:none;
+    color:red;
+}
+.btn-danger {
+    background-color:none;
+}
+
+.required::after {
+    content: '*';
+    color: red;
+    margin-left: 5px; /* Adjust spacing as needed */
+}
+.tickbox-label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+    .tickbox-label::after {
+        content: "\2714"; /* Tick symbol */
+        font-size: 16px;
+        color: transparent;
+    }
+
+input[type="checkbox"]:checked + .tickbox-label::after {
+    color: green; /* Color of the tick when checked */
+}

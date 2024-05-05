@@ -56,9 +56,15 @@
                 @Html.DisplayFor(modelItem => item.Enable)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-                @Html.ActionLink("Details", "Details", new { id = item.TeacherID }, new { @class = "btn btn-outline-secondary" })
-                <button class="btn btn-danger" onclick="confirmDelete('@item.TeacherID')">Delete</button>
+                <button onclick="LoadEditPage('@item.TeacherID')" class="btn">
+                    <i class="bi bi-pencil edit-icon"></i>
+                </button>
+                <button class="btn" onclick="confirmDelete('@item.TeacherID')">
+                    <i class="bi bi-trash delete-btn delete-btn" style="color: red;"></i>
+                </button>
+                <button onclick="LoadDetailsPage('@item.TeacherID')" class="btn">
+                    <i class="bi bi-info-circle"></i>
+                </button>
             </td>
         </tr>
     }

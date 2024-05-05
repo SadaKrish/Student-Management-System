@@ -11,6 +11,7 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public partial class Subject
@@ -26,8 +27,10 @@ namespace sms.Models
         public string Sub_code { get; set; }
         [Required(),Display(Name = "Name")]
         public string Name { get; set; }
-        public Nullable<bool> Enable { get; set; }
-    
+        [Required(ErrorMessage = "Enable is required")]
+        [DisplayName("Enable")]
+        public bool Enable { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,0 +1,35 @@
+﻿<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Allocated Teachers</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var subject in Model)
+        {
+            <tr>
+                <td>@subject.Sub_code - @subject.Name </td>
+                <td>
+                    @foreach (var teacher in subject.Teachers)
+                    {
+                        <span>@teacher.FirstName @teacher.LastName</span><br /><br />
+                    }
+                </td>
+                <td>
+                    @foreach (var teacher in subject.Teachers)
+                    {
+                        <button class="btn removeSubject p-1" data-teacher-id="@teacher.TeacherID" data-subject-code="@subject.Sub_code"><i class="fas fa-trash-alt delete-icon" style="color: red;"></i></button>
+                        <button class="btn editSubject p-1" data-teacher-id="@teacher.TeacherID" data-subject-code="@subject.Sub_code"><i class="fas fa-edit edit-icon"></i></button>
+                        <br /><br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

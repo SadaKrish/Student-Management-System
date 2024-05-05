@@ -4,6 +4,7 @@
     ViewBag.Title = "Create";
 }
 
+
 <h2>Create</h2>
 
 
@@ -11,7 +12,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+    <div class="form-horizontal col-6">
         <h4>Subject</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -31,14 +32,11 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Enable, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Enable)
-                    @Html.ValidationMessageFor(model => model.Enable, "", new { @class = "text-danger" })
-                </div>
-            </div>
+        <div class="form-check">
+            @Html.CheckBoxFor(model => model.Enable, new { @class = "form-check-input" })
+            <label class="form-check-label" for="Enable">
+                Enable
+            </label>
         </div>
 
         <div class="form-group">
@@ -57,3 +55,25 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
+ <script>
+     function toggleEnable(id, enable) {
+         $.ajax({
+             url: '/Subjects/ToggleEnable',
+             type: 'POST',
+             data: { id: id, enable: enable },
+             success: function (response) {
+                 if (response.success) {
+                     loadData();
+                     Swal.fire('Success!', response.message, 'success');
+                 } else {
+                     Swal.fire('Error!', response.message, 'error');
+                 }
+             },
+             error: function (error) {
+                 console.log(error);
+                 Swal.fire('Error!', 'An error occurred while toggling student enable status.', 'error');
+             }
+         });
+     }
+
+ </script>
