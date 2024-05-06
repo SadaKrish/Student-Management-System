@@ -12,7 +12,7 @@ namespace sms.Controllers
 {
     public class TeachersController : Controller
     {
-        private sms_dbEntities db = new sms_dbEntities();
+        private sms_db1Entities db = new sms_db1Entities();
 
         // GET: Teachers
         public ActionResult Index()
@@ -84,36 +84,31 @@ namespace sms.Controllers
             {
                 db.Entry(teacher).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(new { success = true, redirectTo = Url.Action("Index") });
             }
-            return PartialView("_EditPartial",teacher);
+            return PartialView("_EditPartial", teacher);
         }
 
+
         // GET: Teachers/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult DeleteConfirmed(string id)
         {
             try
             {
-                // Find the student with the given ID
-                var teacher = db.Teachers.Find(id);
-
+                Teacher teacher = db.Teachers.Find(id);
                 if (teacher == null)
                 {
-                    // Return error response if student not found
                     return Json(new { success = false, message = "Teacher not found." });
                 }
 
-                // Remove the student from the database
                 db.Teachers.Remove(teacher);
                 db.SaveChanges();
 
-                // Return success response
                 return Json(new { success = true, message = "Teacher deleted successfully." });
             }
             catch (Exception ex)
             {
-                // Return error response if an exception occurs
-                return Json(new { success = false, message = "An error occurred while deleting the teacher." });
+                return Json(new { success = false, message = "An error occurred while deleting the teacher: " + ex.Message });
             }
         }
         //check box
@@ -147,21 +142,23 @@ namespace sms.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult TeacherDetails(string id)
+        public ActionResult TeacherDetails(string teacherId)
         {
-            // Retrieve the student with the specified ID including related teachers and subjects
-            var teacher = db.Teachers
-                            .Include(s => s.Students)
-                            .Include(s => s.Subjects)
-                            .FirstOrDefault(s => s.TeacherID == id);
+            // Retrieve the student with the given studentId
+            var teacher= db.Teachers.Include(s => s.Student_Subject_Teacher_Allocation)
+                                      .SingleOrDefault(s => s.TeacherID == teacherId);
 
             if (teacher == null)
             {
-                return HttpNotFound();
+                return HttpNotFound(); // Or handle the case when student is not found
             }
 
+            // Pass the student, teachers, and subjects to the view
+            ViewBag.Teachers = teacher;
+            ViewBag.Teachers = teacher.Student_Subject_Teacher_Allocation.Select(a => a.Student);
+            ViewBag.Subjects = teacher.Student_Subject_Teacher_Allocation.Select(a => a.Subject);
+
             return PartialView("_TeacherDetails", teacher);
-            //return View(student);
         }
     }
 }

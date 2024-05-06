@@ -3,14 +3,22 @@
 @{
     ViewBag.Title = "Index";
 }
+<style>
+    .btn {
+        background-color: #cbf5ee;
+        color:black;
+    }
+    
+</style>
 <h2 class="text-center">Student</h2>
+<hr/>
 <p class="align-content-end" id="button">
 
-    <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Add Student</button>
+    <button onclick="LoadCreatePage()" class="btn text-dark">Add Student</button>
 </p>
 <!-- Student List Partial View -->
 <div id="student-list">
-    <table class="table table-bordered">
+    <table class="table">
         <tr>
             <th>@Html.DisplayNameFor(model => model.StdID)</th>
             <th>@Html.DisplayNameFor(model => model.FirstName)</th>
@@ -20,6 +28,7 @@
             <th>@Html.DisplayNameFor(model => model.Address)</th>
             <th>@Html.DisplayNameFor(model => model.ContactNo)</th>
             <th>@Html.DisplayNameFor(model => model.Enable)</th>
+            <th></th>
         </tr>
 
         @foreach (var item in Model)
@@ -32,7 +41,7 @@
                 <td>@Html.DisplayFor(modelItem => item.DOB)</td>
                 <td>@Html.DisplayFor(modelItem => item.Address)</td>
                 <td>@Html.DisplayFor(modelItem => item.ContactNo)</td>
-                <td>@Html.DisplayFor(modelItem => item.Enable)</td>
+                <td class="enable">@Html.DisplayFor(modelItem => item.Enable)</td>
                 <td>
                     <button onclick="LoadEditPage('@item.StdID')" class="btn">
                         <i class="bi bi-pencil edit-icon"></i>
@@ -49,69 +58,63 @@
     </table>
 </div>
 
-<div id="createnew" style="display:none">
-    <button id="load-list" class="btn btn-secondary text-light m-4" onclick="LoadList()">Back</button>
+<button id="back-to-list" class="btn" onclick="LoadList()" style="display: none;">Back to List</button>
+<div id="createnew">
+    
 </div>
 
 <script>
-    
-
-    function LoadList() {
-        // Show only the "Back" button without reloading the page
-        $("#student-list").show(); // Show the student list
-        $("#createnew").hide(); // Hide the create new page
-        $("#button").show(); // Show the "Create New" button
-        $("#load-list").hide(); // Hide the "Back" button
-    }
 
     function LoadCreatePage() {
-        // Hide student list and load create new form
+        //* /Hide student list and load create new form*/
         $("#student-list").hide();
-        $("#button").hide();
-        $("#createnew").show();
-        $("load-list").show();// Show the "Back" button
+        $('#button').hide();
+        $('#back-to-list').show();
         $.ajax({
             type: "GET",
             url: "@Url.Action("Create", "Students")",
+
             data: {},
             cache: false,
             async: false,
+
             success: function (data) {
                 $("#createnew").html(data)
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert('');
-            }
-        })
-    }
-
-    function LoadDetailsPage(studentId) {
-        // Hide student list and button
-        $("#student-list").hide();
-        $("#button").hide();
-        $("createnew").show();
-        $("load-list").show();// Show the "Back" button
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("StudentDetails", "Students")",
-            data: { id: studentId }, // Pass studentId as data
-            cache: false,
-            success: function (data) {
-                // Load create new form with student details
-                $("#createnew").html(data);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert('Error loading student details.');
+                aler('');
             }
         });
     }
+
+
+    function LoadDetailsPage(studentId) {
+    // Hide student list and button
+    $("#student-list").hide();
+    $("#button").hide();
+    $("#createnew").show();
+    $("#back-to-list").show(); // Show the "Back" button
+    $.ajax({
+        type: "GET",
+        url: "@Url.Action("StudentDetails", "Students")",
+        data: { studentId: studentId }, // Pass studentId as data
+        cache: false,
+        success: function (data) {
+            // Load create new form with student details
+            $("#createnew").html(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert('Error loading student details.');
+        }
+    });
+}
 
     function LoadEditPage(studentId) {
         // Hide student list and button
         $("#student-list").hide();
         $("#button").hide();
-        $("createnew").show();
-        $("load-list").show();// Show the "Back" button
+       // $("createnew").show();
+        $("back-to-list").show();// Show the "Back" button
         $.ajax({
             type: "GET",
             url: "@Url.Action("Edit", "Students")",
@@ -125,6 +128,14 @@
                 alert('Error loading student details.');
             }
         });
+    }
+
+    function LoadList() {
+        // Show student list and hide create new form
+        $("#student-list").show();
+        $('#button').show();
+        $('#back-to-list').hide(); // Hide the "Back to List" button
+        $("#createnew").empty(); // Empty the createnew div
     }
 
     function deleteStudent(id) {

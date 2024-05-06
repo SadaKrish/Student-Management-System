@@ -4,13 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="07bfca2a6f8f4379b9d86093de8d61bb" Name="Diagram1">
-        <EntityTypeShape EntityType="sms_dbModel.Student" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="sms_dbModel.Subject" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="sms_dbModel.Teacher" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="sms_dbModel.StudentSubjects" ManuallyRouted="false" />
-        <AssociationConnector Association="sms_dbModel.StudentTeachers" ManuallyRouted="false" />
-        <AssociationConnector Association="sms_dbModel.TeacherSubjects" ManuallyRouted="false" />
+      <Diagram DiagramId="f7b3b8e369c040439e3b078cd754089b" Name="Diagram1">
+        <EntityTypeShape EntityType="sms_db1Model.Student" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="sms_db1Model.Student_Subject_Teacher_Allocation" Width="2.625" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="sms_db1Model.Subject" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="sms_db1Model.Teacher" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <AssociationConnector Association="sms_db1Model.FK__Student_S__StdID__4222D4EF" ManuallyRouted="false" />
+        <AssociationConnector Association="sms_db1Model.FK__Student_S__Sub_c__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="sms_db1Model.FK__Student_S__Teach__403A8C7D" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

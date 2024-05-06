@@ -13,10 +13,10 @@ namespace sms.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class sms_dbEntities : DbContext
+    public partial class sms_db1Entities : DbContext
     {
-        public sms_dbEntities()
-            : base("name=sms_dbEntities")
+        public sms_db1Entities()
+            : base("name=sms_db1Entities")
         {
         }
     
@@ -26,7 +26,9 @@ namespace sms.Models
         }
     
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<Student_Subject_Teacher_Allocation> Student_Subject_Teacher_Allocation { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
+        public object Teacher_Subject_Allocation { get; internal set; }
     }
 }

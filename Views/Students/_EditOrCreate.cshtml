@@ -1,10 +1,8 @@
-﻿@model sms.Models.Teacher
-
+﻿@model sms.Models.Student
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "EditOrCreate";
 }
-
 
 <style>
     .required::after {
@@ -14,17 +12,21 @@
     }
 </style>
 
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
+        <h4>Add a new Student</h4>
+        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.TeacherID, htmlAttributes: new { @class = "control-label col-md-2 required" })
+            @Html.LabelFor(model => model.StdID, htmlAttributes: new { @class = "control-label col-md-2 required" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TeacherID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TeacherID, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.StdID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StdID, "", new { @class = "text-danger" })
                 <span id="stdIDExistsMessage" class="text-danger"></span>
             </div>
         </div>
@@ -62,6 +64,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+
                 @Html.TextBoxFor(model => model.DOB, "{0:yyyy-MM-dd}", new { @class = "form-control", placeholder = "YYYY-MM-DD", id = "DOB" })
                 @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
             </div>
@@ -97,7 +100,7 @@
 
         <div class="form-group d-inline-flex">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default m-4" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
 
         </div>
@@ -124,7 +127,7 @@
 
     function toggleEnable(id, enable) {
         $.ajax({
-            url: '/Teachers/ToggleEnable',
+            url: '/Students/ToggleEnable',
             type: 'POST',
             data: { id: id, enable: enable },
             success: function (response) {
@@ -167,7 +170,7 @@
         });*@
 
     //validation check for id
-            @*$(document).ready(function () {
+            $(document).ready(function () {
     $('#StdID').change(function () {
         var studentId = $(this).val();
         if (studentId) {
@@ -187,7 +190,7 @@
             });
         }
     });
-});*@
+});
 
 
 </script>

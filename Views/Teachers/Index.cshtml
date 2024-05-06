@@ -3,11 +3,17 @@
 @{
     ViewBag.Title = "Index";
 }
+<style>
+    .btn {
+        background-color: #cbf5ee;
+    }
+    
+</style>
 <h2 class="text-center">Teacher</h2>
-
+<hr/>
 <p class="align-content-end" id="button">
 
-    <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
+    <button onclick="LoadCreatePage()" class="btn">Create New</button>
 </p>
 <!-- Student List Partial View -->
 <div id="student-list">
@@ -65,7 +71,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ContactNo)
                 </td>
-                <td>
+                <td class="enable">
                     @Html.DisplayFor(modelItem => item.Enable)
                 </td>
                 <td>
@@ -89,7 +95,7 @@
 
 
 <!--Create form partial view-->
-
+<button id="back-to-list" class="btn" onclick="LoadList()" style="display: none;">Back to List</button>
 <div id="createnew">
 
 </div>
@@ -97,10 +103,11 @@
     function LoadCreatePage() {
         //* /Hide student list and load create new form*/
         $("#student-list").hide();
-         $('#button').hide();
+        $('#button').hide();
+        $('#back-to-list').show();
         $.ajax({
             type: "GET",
-           url: "@Url.Action("Create", "Teachers")",
+            url: "@Url.Action("Create", "Teachers")",
 
             data: {},
             cache: false,
@@ -112,16 +119,16 @@
             error: function (xhr, ajaxOptions, thrownError) {
                 aler('');
             }
-        })
+        });
 
     }
 
-   
+
     function LoadEditPage(studentId) {
         // Hide student list and button
         $("#student-list").hide();
         $('#button').hide();
-
+        $('#back-to-list').show();
         $.ajax({
             type: "GET",
             url: "@Url.Action("Edit", "Teachers")",
@@ -135,7 +142,38 @@
                 alert('Error loading student details.');
             }
         });
-}
+    }
+
+
+    function LoadDetailsPage(teacherId) {
+        // Hide student list and button
+        $("#student-list").hide();
+        $("#button").hide();
+        $("#createnew").show();
+        $("#back-to-list").show(); // Show the "Back" button
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("TeacherDetails", "Teachers")",
+            data: { teacherId: teacherId }, // Pass studentId as data
+            cache: false,
+            success: function (data) {
+                // Load create new form with student details
+                $("#createnew").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Error loading student details.');
+            }
+        });
+
+    }
+
+    function LoadList() {
+        // Show student list and hide create new form
+        $("#student-list").show();
+        $('#button').show();
+        $('#back-to-list').hide(); // Hide the "Back to List" button
+        $("#createnew").empty(); // Empty the createnew div
+    }
 
          function deleteTeacher(id) {
          Swal.fire({
@@ -149,11 +187,11 @@
          }).then((result) => {
              if (result.isConfirmed) {
                  $.ajax({
-                     url: '/Teachers/Delete/' + id, // Updated URL to use StudentsController
+                     url: '/Teachers/DeleteConfirmed/' + id, // Updated URL to use StudentsController
                      type: 'POST',
 
                      success: function (response) {
-                     
+
                          if (response.success) {
                              console.log("Delete");
                              // Remove the deleted student row from the UI

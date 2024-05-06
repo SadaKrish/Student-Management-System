@@ -3,11 +3,19 @@
 @{
     ViewBag.Title = "Index";
 }
+<style>
+    .btn {
+        background-color: #cbf5ee;
+        color:black;
+    }
+   
+</style>
 <h2 class="text-center">Subject</h2>
+<hr/>
 
 <p class="align-content-end" id="button">
 
-    <button onclick="LoadCreatePage()" class="btn bg-secondary text-light">Create New</button>
+    <button onclick="LoadCreatePage()" class="btn">Create New</button>
 </p>
 <table class="table" id="subject-list">
     <tr>
@@ -32,7 +40,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="enable">
                 @Html.DisplayFor(modelItem => item.Enable)
             </td>
             <td>
@@ -51,14 +59,17 @@
     }
 
 </table>
+<button id="back-to-list" class="btn" onclick="LoadList()" style="display: none;">Back to List</button>
 <div id="createnew">
-
+    
 </div>
+
 <script>
     function LoadCreatePage() {
         //* /Hide student list and load create new form*/
         $("#subject-list").hide();
-
+        $("#button").hide();
+        $("#back-to-list").show();
         $.ajax({
             type: "GET",
            url: "@Url.Action("Create", "Subjects")",
@@ -77,15 +88,16 @@
 
     }
 
-    function LoadDetailsPage(studentId) {
+    function LoadDetailsPage(subcode) {
         // Hide student list and button
         $("#subject-list").hide();
-        $('#button').hide();
-
+        $("#button").hide();
+        $("#createnew").show();
+        $("#back-to-list").show(); // Show the "Back" button
         $.ajax({
             type: "GET",
             url: "@Url.Action("SubjectDetails", "Subjects")",
-            data: { id: studentId }, // Pass studentId as data
+            data: { subcode: subcode }, // Pass studentId as data
             cache: false,
             success: function (data) {
                 // Load create new form with student details
@@ -96,15 +108,16 @@
             }
         });
     }
-    function LoadEditPage(studentId) {
+
+    function LoadEditPage(subcode) {
         // Hide student list and button
         $("#subject-list").hide();
         $('#button').hide();
-
+        $("#back-to-list").show();
         $.ajax({
             type: "GET",
             url: "@Url.Action("Edit", "Subjects")",
-            data: { id: studentId }, // Pass studentId as data
+            data: { id: subcode }, // Pass studentId as data
             cache: false,
             success: function (data) {
                 // Load create new form with student details
@@ -114,43 +127,53 @@
                 alert('Error loading subjects details.');
             }
         });
-}
-    function deleteSubject(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/Subjects/Delete/' + id, // Updated URL to use StudentsController
-                    type: 'POST',
-
-                    success: function (response) {
-
-                        if (response.success) {
-                            console.log("Delete");
-                            // Remove the deleted student row from the UI
-                            $('.delete-btn' + id).closest('tr').remove();
-                            Swal.fire('Deleted!', 'Record deleted successfully.', 'success');
-                        } else {
-                            Swal.fire('Error!', response.message, 'error');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log(xhr);
-                        console.log(status);
-                        console.log(error);
-                        Swal.fire('Error!', 'An error occurred while deleting the student.', 'error');
-                    }
-                });
-            }
-        });
     }
+
+    function LoadList() {
+        // Show student list and hide create new form
+        $("#subject-list").show();
+        $('#button').show();
+        $('#back-to-list').hide(); // Hide the "Back to List" button
+        $("#createnew").empty(); // Empty the createnew div
+    }
+
+    function deleteSubject(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("DeleteConfirmed", "Subjects")', // Use the DeleteConfirmed action
+                type: 'POST',
+                data: { id: id }, // Pass the id as data
+                success: function (response) {
+                    console.log(id);
+                    if (response.success) {
+                        // Optionally, remove the deleted student row from the UI
+                        // $('.delete-btn' + id).closest('tr').remove();
+                        Swal.fire('Deleted!', 'Record deleted successfully.', 'success');
+                        // Optionally, refresh the page or update UI as needed
+                        location.reload(); // Reload the page
+                    } else {
+                        Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                    Swal.fire('Error!', 'An error occurred while deleting the subject.', 'error');
+                }
+            });
+        }
+    });
+}
 
 
 

@@ -1,28 +1,37 @@
 ﻿@model sms.Models.Teacher
-@{
-    ViewBag.Title = "TeacherDetails";
-}
 
-<!-- Display student information -->
-<div id="details">
-    <h2>Teacher Details</h2>
+@{
+    ViewBag.Title = "Teacher Details";
+}
+<div>
+    <h4>Teacher Information</h4>
     <p>Teacher ID: @Model.TeacherID</p>
     <p>Name: @Model.FirstName @Model.LastName</p>
-
-    <!-- Display associated teachers and their subjects -->
-    <h3>Teachers and Subjects</h3>
-    <ul>
-        @foreach (var student in Model.Students)
-        {
-            <li>@student.FirstName @student.LastName</li>
-            <ul>
-                @foreach (var subject in student.Subjects)
-                {
-                    <li>@subject.Name</li>
-                }
-            </ul>
-        }
-    </ul>
 </div>
 
-@Html.ActionLink("Back to Teacher list", "Index", "Teachers", new { id = ViewBag.StudentId }, new { @class = "btn  bg-secondary text-light" })
+@if (Model.Student_Subject_Teacher_Allocation.Any())
+{
+    <div>
+        <h4>Students and Subjects</h4>
+        <ul>
+            @foreach (var allocation in Model.Student_Subject_Teacher_Allocation)
+            {
+                <li>
+                    <strong>@allocation.Student.FirstName @allocation.Student.LastName</strong> studies <em>@allocation.Subject.Name</em>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div>
+        <p>No teacher or subject information available.</p>
+    </div>
+}
+
+
+
+<script>
+
+</script>

@@ -11,29 +11,26 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Subject
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Subject()
         {
-            this.Students = new HashSet<Student>();
+            this.Student_Subject_Teacher_Allocation = new HashSet<Student_Subject_Teacher_Allocation>();
             this.Teachers = new HashSet<Teacher>();
         }
-
-        [Required(), Display(Name = "Subject Code")]
+    
         public string Sub_code { get; set; }
-        [Required(),Display(Name = "Name")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Enable is required")]
-        [DisplayName("Enable")]
         public bool Enable { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<Student_Subject_Teacher_Allocation> Student_Subject_Teacher_Allocation { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
+        public object Teacher_Subject_Allocation { get; internal set; }
     }
 }

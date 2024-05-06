@@ -1,54 +1,37 @@
 ﻿@model sms.Models.Student
-@{
-    ViewBag.Title = "StudentDetails";
-}
 
-<!-- Display student information -->
-<div id="details">
-    <h2>Student Details</h2>
+@{
+    ViewBag.Title = "Student Details";
+}
+<div>
+    <h4>Student Information</h4>
     <p>Student ID: @Model.StdID</p>
     <p>Name: @Model.FirstName @Model.LastName</p>
-
-    <!-- Display associated teachers and their subjects -->
-    <h3>Teachers and Subjects</h3>
-    <ul>
-        @foreach (var teacher in Model.Teachers)
-        {
-            <li>@teacher.FirstName @teacher.LastName</li>
-             <ul>
-                @foreach (var subject in teacher.Subjects)
-                {
-                    <li>@subject.Name</li>
-                }
-            </ul>
-        }
-    </ul>
 </div>
 
+@if (Model.Student_Subject_Teacher_Allocation.Any())
+{
+    <div>
+        <h4>Teachers and Subjects</h4>
+        <ul>
+            @foreach (var allocation in Model.Student_Subject_Teacher_Allocation)
+            {
+                <li>
+                    <strong>@allocation.Teacher.FirstName @allocation.Teacher.LastName</strong> teaches <em>@allocation.Subject.Name</em>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div>
+        <p>No teacher or subject information available.</p>
+    </div>
+}
 
 
-
-@Html.ActionLink("Back to Student list", "Index", "Students", new { id = ViewBag.StudentId }, new { @class = "btn bg-secondary text-light m-3" })
 
 <script>
-    function displayStudentDetails() {
-        var selectedStudentId = $("#SelectedStudentId").val();
-
-        // Perform AJAX request to fetch student details based on the selected ID
-        $.ajax({
-            url: '@Url.Action("GetStudentDetails", "YourControllerName")', // Replace YourControllerName with the actual name of your controller
-            type: 'GET',
-            data: { studentId: selectedStudentId },
-            success: function (data) {
-                // Handle successful response
-                // Display the details of the selected student using data received from the server
-                // For example:
-                $("#studentDetailsContainer").html(data);
-            },
-            error: function () {
-                // Handle error
-                console.error('Error fetching student details');
-            }
-        });
-    }
+   
 </script>

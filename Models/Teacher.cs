@@ -11,39 +11,25 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Teacher
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Teacher()
         {
-            this.Students = new HashSet<Student>();
-            this.Subjects = new HashSet<Subject>();
+            this.Student_Subject_Teacher_Allocation = new HashSet<Student_Subject_Teacher_Allocation>();
         }
-        [Required(),Display(Name ="Teacher ID")]
+    
         public string TeacherID { get; set; }
-        [Required(),Display(Name ="First Name")]
         public string FirstName { get; set; }
-        [Required(), Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Required(), Display(Name = "Gender")]
         public string Gender { get; set; }
-        
         public Nullable<System.DateTime> DOB { get; set; }
-        [Display(Name = "Address")]
         public string Address { get; set; }
-        [Display(Name = "Contact No")]
         public Nullable<int> ContactNo { get; set; }
-
-        [Required(ErrorMessage = "Enable is required")]
-        [DisplayName("Enable")]
         public bool Enable { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Student> Students { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<Student_Subject_Teacher_Allocation> Student_Subject_Teacher_Allocation { get; set; }
     }
 }

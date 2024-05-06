@@ -1,0 +1,65 @@
+﻿@model IEnumerable<sms.Models.Subject>
+
+@{
+    ViewBag.Title = "Teacher Subject Allocation";
+}
+
+<h2>Teacher Subject Allocation</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Subjects</h3>
+        <form method="post" id="teacherSubjectForm">
+            @Html.DropDownList("teacherId", ViewBag.TeacherIdList as SelectList, "Select Teacher", new { @class = "form-control", id = "teacherId" })
+
+            <br />
+            <select name="selectedSubjects" id="selectedSubjects" multiple class="form-control">
+                @foreach (var subject in Model)
+                {
+                    <option value="@subject.Sub_code">@subject.Name</option>
+                }
+            </select>
+            <br />
+            <button type="button" id="assignSubjectBtn" class="btn btn-primary">Assign Subjects</button>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#assignSubjectBtn').click(function () {
+                var teacherId = $('#teacherId').val();
+                var selectedSubjects = $('#selectedSubjects').val();
+
+                if (!teacherId) {
+                    alert('Please select a teacher.');
+                    return;
+                }
+
+                if (!selectedSubjects || selectedSubjects.length === 0) {
+                    alert('Please select at least one subject.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AssignSubjectsToTeacher", "Allocation")',
+                    type: 'POST',
+                    data: { teacherId: teacherId, selectedSubjects: selectedSubjects },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Subjects assigned successfully.');
+                            // Optionally, you can reload the page or update the UI here
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while processing your request.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+

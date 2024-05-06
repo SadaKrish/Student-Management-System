@@ -4,241 +4,224 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="sms_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Students">
+      <Schema Namespace="sms_db1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Student">
           <Key>
             <PropertyRef Name="StdID" />
           </Key>
-          <Property Name="StdID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="FirstName" Type="varchar" MaxLength="30" />
-          <Property Name="LastName" Type="varchar" MaxLength="30" />
-          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="StdID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="char" MaxLength="10" />
           <Property Name="DOB" Type="date" />
-          <Property Name="Address" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="100" />
           <Property Name="ContactNo" Type="int" />
           <Property Name="Enable" Type="bit" />
         </EntityType>
-        <EntityType Name="StudentSubjects">
-          <Key>
-            <PropertyRef Name="StdID" />
-            <PropertyRef Name="Sub_code" />
-          </Key>
-          <Property Name="StdID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Sub_code" Type="varchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <EntityType Name="StudentTeachers">
+        <EntityType Name="Student_Subject_Teacher_Allocation">
           <Key>
             <PropertyRef Name="StdID" />
             <PropertyRef Name="TeacherID" />
+            <PropertyRef Name="Sub_code" />
           </Key>
-          <Property Name="StdID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TeacherID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="StdID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeacherID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sub_code" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Subjects">
+        <EntityType Name="Subject">
           <Key>
             <PropertyRef Name="Sub_code" />
           </Key>
-          <Property Name="Sub_code" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="20" />
+          <Property Name="Sub_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
           <Property Name="Enable" Type="bit" />
         </EntityType>
-        <EntityType Name="Teachers">
+        <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="TeacherID" />
           </Key>
-          <Property Name="TeacherID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="FirstName" Type="varchar" MaxLength="30" />
-          <Property Name="LastName" Type="varchar" MaxLength="30" />
-          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="TeacherID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="char" MaxLength="10" />
           <Property Name="DOB" Type="date" />
-          <Property Name="Address" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="100" />
           <Property Name="ContactNo" Type="int" />
           <Property Name="Enable" Type="bit" />
         </EntityType>
-        <EntityType Name="TeacherSubjects">
-          <Key>
-            <PropertyRef Name="TeacherID" />
-            <PropertyRef Name="Sub_code" />
-          </Key>
-          <Property Name="TeacherID" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="Sub_code" Type="varchar" MaxLength="10" Nullable="false" />
-        </EntityType>
-        <Association Name="FK__StudentSu__StdID__3D5E1FD2">
-          <End Role="Students" Type="Self.Students" Multiplicity="1" />
-          <End Role="StudentSubjects" Type="Self.StudentSubjects" Multiplicity="*" />
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'sms_db1.dbo.Teacher_Subject_Allocation' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Teacher_Subject_Allocation">
+          <Property Name="TeacherID" Type="varchar" MaxLength="50" />
+          <Property Name="Sub_code" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+        <Association Name="FK__Student_S__StdID__4222D4EF">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Students">
+            <Principal Role="Student">
               <PropertyRef Name="StdID" />
             </Principal>
-            <Dependent Role="StudentSubjects">
+            <Dependent Role="Student_Subject_Teacher_Allocation">
               <PropertyRef Name="StdID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StudentSu__Sub_c__3E52440B">
-          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
-          <End Role="StudentSubjects" Type="Self.StudentSubjects" Multiplicity="*" />
+        <Association Name="FK__Student_S__Sub_c__412EB0B6">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Subjects">
+            <Principal Role="Subject">
               <PropertyRef Name="Sub_code" />
             </Principal>
-            <Dependent Role="StudentSubjects">
-              <PropertyRef Name="Sub_code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__StudentTe__StdID__45F365D3">
-          <End Role="Students" Type="Self.Students" Multiplicity="1" />
-          <End Role="StudentTeachers" Type="Self.StudentTeachers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Students">
-              <PropertyRef Name="StdID" />
-            </Principal>
-            <Dependent Role="StudentTeachers">
-              <PropertyRef Name="StdID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__StudentTe__Teach__44FF419A">
-          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
-          <End Role="StudentTeachers" Type="Self.StudentTeachers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Teachers">
-              <PropertyRef Name="TeacherID" />
-            </Principal>
-            <Dependent Role="StudentTeachers">
-              <PropertyRef Name="TeacherID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TeacherSu__Sub_c__4222D4EF">
-          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
-          <End Role="TeacherSubjects" Type="Self.TeacherSubjects" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subjects">
-              <PropertyRef Name="Sub_code" />
-            </Principal>
-            <Dependent Role="TeacherSubjects">
+            <Dependent Role="Student_Subject_Teacher_Allocation">
               <PropertyRef Name="Sub_code" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherSu__Teach__412EB0B6">
-          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
-          <End Role="TeacherSubjects" Type="Self.TeacherSubjects" Multiplicity="*" />
+        <Association Name="FK__Student_S__Teach__403A8C7D">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Teachers">
+            <Principal Role="Teacher">
               <PropertyRef Name="TeacherID" />
             </Principal>
-            <Dependent Role="TeacherSubjects">
+            <Dependent Role="Student_Subject_Teacher_Allocation">
               <PropertyRef Name="TeacherID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sms_dbModelStoreContainer">
-          <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StudentSubjects" EntityType="Self.StudentSubjects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StudentTeachers" EntityType="Self.StudentTeachers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Teachers" EntityType="Self.Teachers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TeacherSubjects" EntityType="Self.TeacherSubjects" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__StudentSu__StdID__3D5E1FD2" Association="Self.FK__StudentSu__StdID__3D5E1FD2">
-            <End Role="Students" EntitySet="Students" />
-            <End Role="StudentSubjects" EntitySet="StudentSubjects" />
+        <!--Errors Found During Generation:
+error 6004: The table 'sms_db1.dbo.Teacher_Subject_Allocation' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Teacher_S__Sub_c__3D5E1FD2" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'sms_db1.dbo.Teacher_Subject_Allocation' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Teacher_S__Teach__3C69FB99" />-->
+        <EntityContainer Name="sms_db1ModelStoreContainer">
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student_Subject_Teacher_Allocation" EntityType="Self.Student_Subject_Teacher_Allocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Student_S__StdID__4222D4EF" Association="Self.FK__Student_S__StdID__4222D4EF">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
-          <AssociationSet Name="FK__StudentSu__Sub_c__3E52440B" Association="Self.FK__StudentSu__Sub_c__3E52440B">
-            <End Role="Subjects" EntitySet="Subjects" />
-            <End Role="StudentSubjects" EntitySet="StudentSubjects" />
+          <AssociationSet Name="FK__Student_S__Sub_c__412EB0B6" Association="Self.FK__Student_S__Sub_c__412EB0B6">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
-          <AssociationSet Name="FK__StudentTe__StdID__45F365D3" Association="Self.FK__StudentTe__StdID__45F365D3">
-            <End Role="Students" EntitySet="Students" />
-            <End Role="StudentTeachers" EntitySet="StudentTeachers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__StudentTe__Teach__44FF419A" Association="Self.FK__StudentTe__Teach__44FF419A">
-            <End Role="Teachers" EntitySet="Teachers" />
-            <End Role="StudentTeachers" EntitySet="StudentTeachers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TeacherSu__Sub_c__4222D4EF" Association="Self.FK__TeacherSu__Sub_c__4222D4EF">
-            <End Role="Subjects" EntitySet="Subjects" />
-            <End Role="TeacherSubjects" EntitySet="TeacherSubjects" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TeacherSu__Teach__412EB0B6" Association="Self.FK__TeacherSu__Teach__412EB0B6">
-            <End Role="Teachers" EntitySet="Teachers" />
-            <End Role="TeacherSubjects" EntitySet="TeacherSubjects" />
+          <AssociationSet Name="FK__Student_S__Teach__403A8C7D" Association="Self.FK__Student_S__Teach__403A8C7D">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="sms_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="sms_db1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="StdID" />
           </Key>
-          <Property Name="StdID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StdID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="DOB" Type="DateTime" Precision="0" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ContactNo" Type="Int32" />
           <Property Name="Enable" Type="Boolean" />
-          <NavigationProperty Name="Subjects" Relationship="Self.StudentSubjects" FromRole="Students" ToRole="Subjects" />
-          <NavigationProperty Name="Teachers" Relationship="Self.StudentTeachers" FromRole="Students" ToRole="Teachers" />
+          <NavigationProperty Name="Student_Subject_Teacher_Allocation" Relationship="Self.FK__Student_S__StdID__4222D4EF" FromRole="Student" ToRole="Student_Subject_Teacher_Allocation" />
+        </EntityType>
+        <EntityType Name="Student_Subject_Teacher_Allocation">
+          <Key>
+            <PropertyRef Name="StdID" />
+            <PropertyRef Name="TeacherID" />
+            <PropertyRef Name="Sub_code" />
+          </Key>
+          <Property Name="StdID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeacherID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Sub_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Self.FK__Student_S__StdID__4222D4EF" FromRole="Student_Subject_Teacher_Allocation" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK__Student_S__Sub_c__412EB0B6" FromRole="Student_Subject_Teacher_Allocation" ToRole="Subject" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK__Student_S__Teach__403A8C7D" FromRole="Student_Subject_Teacher_Allocation" ToRole="Teacher" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
             <PropertyRef Name="Sub_code" />
           </Key>
-          <Property Name="Sub_code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Sub_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Enable" Type="Boolean" />
-          <NavigationProperty Name="Students" Relationship="Self.StudentSubjects" FromRole="Subjects" ToRole="Students" />
-          <NavigationProperty Name="Teachers" Relationship="Self.TeacherSubjects" FromRole="Subjects" ToRole="Teachers" />
+          <NavigationProperty Name="Student_Subject_Teacher_Allocation" Relationship="Self.FK__Student_S__Sub_c__412EB0B6" FromRole="Subject" ToRole="Student_Subject_Teacher_Allocation" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
             <PropertyRef Name="TeacherID" />
           </Key>
-          <Property Name="TeacherID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TeacherID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="DOB" Type="DateTime" Precision="0" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ContactNo" Type="Int32" />
           <Property Name="Enable" Type="Boolean" />
-          <NavigationProperty Name="Students" Relationship="Self.StudentTeachers" FromRole="Teachers" ToRole="Students" />
-          <NavigationProperty Name="Subjects" Relationship="Self.TeacherSubjects" FromRole="Teachers" ToRole="Subjects" />
+          <NavigationProperty Name="Student_Subject_Teacher_Allocation" Relationship="Self.FK__Student_S__Teach__403A8C7D" FromRole="Teacher" ToRole="Student_Subject_Teacher_Allocation" />
         </EntityType>
-        <Association Name="StudentSubjects">
-          <End Role="Students" Type="Self.Student" Multiplicity="*" />
-          <End Role="Subjects" Type="Self.Subject" Multiplicity="*" />
+        <Association Name="FK__Student_S__StdID__4222D4EF">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StdID" />
+            </Principal>
+            <Dependent Role="Student_Subject_Teacher_Allocation">
+              <PropertyRef Name="StdID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <Association Name="StudentTeachers">
-          <End Role="Students" Type="Self.Student" Multiplicity="*" />
-          <End Role="Teachers" Type="Self.Teacher" Multiplicity="*" />
+        <Association Name="FK__Student_S__Sub_c__412EB0B6">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Sub_code" />
+            </Principal>
+            <Dependent Role="Student_Subject_Teacher_Allocation">
+              <PropertyRef Name="Sub_code" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <Association Name="TeacherSubjects">
-          <End Role="Subjects" Type="Self.Subject" Multiplicity="*" />
-          <End Role="Teachers" Type="Self.Teacher" Multiplicity="*" />
+        <Association Name="FK__Student_S__Teach__403A8C7D">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Student_Subject_Teacher_Allocation" Type="Self.Student_Subject_Teacher_Allocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="TeacherID" />
+            </Principal>
+            <Dependent Role="Student_Subject_Teacher_Allocation">
+              <PropertyRef Name="TeacherID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sms_dbEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sms_db1Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Student_Subject_Teacher_Allocation" EntityType="Self.Student_Subject_Teacher_Allocation" />
           <EntitySet Name="Subjects" EntityType="Self.Subject" />
           <EntitySet Name="Teachers" EntityType="Self.Teacher" />
-          <AssociationSet Name="StudentSubjects" Association="Self.StudentSubjects">
-            <End Role="Students" EntitySet="Students" />
-            <End Role="Subjects" EntitySet="Subjects" />
+          <AssociationSet Name="FK__Student_S__StdID__4222D4EF" Association="Self.FK__Student_S__StdID__4222D4EF">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
-          <AssociationSet Name="StudentTeachers" Association="Self.StudentTeachers">
-            <End Role="Students" EntitySet="Students" />
-            <End Role="Teachers" EntitySet="Teachers" />
+          <AssociationSet Name="FK__Student_S__Sub_c__412EB0B6" Association="Self.FK__Student_S__Sub_c__412EB0B6">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
-          <AssociationSet Name="TeacherSubjects" Association="Self.TeacherSubjects">
-            <End Role="Subjects" EntitySet="Subjects" />
-            <End Role="Teachers" EntitySet="Teachers" />
+          <AssociationSet Name="FK__Student_S__Teach__403A8C7D" Association="Self.FK__Student_S__Teach__403A8C7D">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Student_Subject_Teacher_Allocation" EntitySet="Student_Subject_Teacher_Allocation" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -246,10 +229,10 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sms_dbModelStoreContainer" CdmEntityContainer="sms_dbEntities">
+        <EntityContainerMapping StorageEntityContainer="sms_db1ModelStoreContainer" CdmEntityContainer="sms_db1Entities">
           <EntitySetMapping Name="Students">
-            <EntityTypeMapping TypeName="sms_dbModel.Student">
-              <MappingFragment StoreEntitySet="Students">
+            <EntityTypeMapping TypeName="sms_db1Model.Student">
+              <MappingFragment StoreEntitySet="Student">
                 <ScalarProperty Name="StdID" ColumnName="StdID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -261,9 +244,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Student_Subject_Teacher_Allocation">
+            <EntityTypeMapping TypeName="sms_db1Model.Student_Subject_Teacher_Allocation">
+              <MappingFragment StoreEntitySet="Student_Subject_Teacher_Allocation">
+                <ScalarProperty Name="StdID" ColumnName="StdID" />
+                <ScalarProperty Name="TeacherID" ColumnName="TeacherID" />
+                <ScalarProperty Name="Sub_code" ColumnName="Sub_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Subjects">
-            <EntityTypeMapping TypeName="sms_dbModel.Subject">
-              <MappingFragment StoreEntitySet="Subjects">
+            <EntityTypeMapping TypeName="sms_db1Model.Subject">
+              <MappingFragment StoreEntitySet="Subject">
                 <ScalarProperty Name="Sub_code" ColumnName="Sub_code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -271,8 +263,8 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Teachers">
-            <EntityTypeMapping TypeName="sms_dbModel.Teacher">
-              <MappingFragment StoreEntitySet="Teachers">
+            <EntityTypeMapping TypeName="sms_db1Model.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
                 <ScalarProperty Name="TeacherID" ColumnName="TeacherID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -284,30 +276,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="StudentSubjects" TypeName="sms_dbModel.StudentSubjects" StoreEntitySet="StudentSubjects">
-            <EndProperty Name="Students">
-              <ScalarProperty Name="StdID" ColumnName="StdID" />
-            </EndProperty>
-            <EndProperty Name="Subjects">
-              <ScalarProperty Name="Sub_code" ColumnName="Sub_code" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="StudentTeachers" TypeName="sms_dbModel.StudentTeachers" StoreEntitySet="StudentTeachers">
-            <EndProperty Name="Students">
-              <ScalarProperty Name="StdID" ColumnName="StdID" />
-            </EndProperty>
-            <EndProperty Name="Teachers">
-              <ScalarProperty Name="TeacherID" ColumnName="TeacherID" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="TeacherSubjects" TypeName="sms_dbModel.TeacherSubjects" StoreEntitySet="TeacherSubjects">
-            <EndProperty Name="Subjects">
-              <ScalarProperty Name="Sub_code" ColumnName="Sub_code" />
-            </EndProperty>
-            <EndProperty Name="Teachers">
-              <ScalarProperty Name="TeacherID" ColumnName="TeacherID" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

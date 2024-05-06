@@ -12,7 +12,7 @@ namespace sms.Controllers
 {
     public class SubjectsController : Controller
     {
-        private sms_dbEntities db = new sms_dbEntities();
+        private sms_db1Entities db = new sms_db1Entities();
 
         // GET: Subjects
         public ActionResult Index()
@@ -86,36 +86,29 @@ namespace sms.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(subject);
+            return PartialView("_EditPartial",subject);
         }
 
         // GET: Subjects/Delete/5
-        // GET: Students/Delete/5
 
-         public ActionResult Delete(string id)
+        public ActionResult DeleteConfirmed(string id)
         {
             try
             {
-                // Find the student with the given ID
-                var subject = db.Subjects.Find(id);
-
+                Subject subject = db.Subjects.Find(id);
                 if (subject == null)
                 {
-                    // Return error response if student not found
                     return Json(new { success = false, message = "Subject not found." });
                 }
 
-                // Remove the student from the database
                 db.Subjects.Remove(subject);
                 db.SaveChanges();
 
-                // Return success response
                 return Json(new { success = true, message = "Subject deleted successfully." });
             }
             catch (Exception ex)
             {
-                // Return error response if an exception occurs
-                return Json(new { success = false, message = "An error occurred while deleting the subject." });
+                return Json(new { success = false, message = "An error occurred while deleting the subject " + ex.Message });
             }
         }
 
@@ -149,22 +142,27 @@ namespace sms.Controllers
             base.Dispose(disposing);
         }
         //subhect details
-        public ActionResult SubjectDetails(string id)
+        public ActionResult SubjectDetails(string subjectCode)
         {
-            // Retrieve the subject with the specified ID including related students and teachers
+            if (string.IsNullOrEmpty(subjectCode))
+            {
+                return HttpNotFound(); // Handle invalid subjectCode
+            }
+
+            // Retrieve the subject with the given subjectCode
             var subject = db.Subjects
-                            .Include(s => s.Students)
-                            .Include(s => s.Teachers)
-                            .FirstOrDefault(s => s.Sub_code == id);
+                .Include(s => s.Teachers) // Include the Teachers navigation property
+                .Include(s => s.Student_Subject_Teacher_Allocation) // Include the Student_Subject_Teacher_Allocation navigation property
+                .SingleOrDefault(s => s.Sub_code == subjectCode);
 
             if (subject == null)
             {
-                return HttpNotFound();
+                return HttpNotFound(); // Handle subject not found
             }
 
-            return PartialView("_SubjectDetails", subject);
-            // Or return View(subject) if you want to return a full view instead of a partial view
+            // Pass the subject and associated teachers to the view
+            return PartialView("_SubjectDetails",subject);
         }
-        
+
     }
 }

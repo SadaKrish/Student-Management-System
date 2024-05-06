@@ -11,7 +11,7 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
+<div class="form-horizontal" id="create">
 
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -81,7 +81,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Update" class="btn btn-outline-secondary" />
+            <input type="submit" value="Update" class="btn m-4" />
         </div>
     </div>
 </div>
@@ -107,5 +107,28 @@
             yearRange: "-100:+0" // Set year range from 100 years ago to current year
         });
     });
+
+    $(function () {
+        $('#create').submit(function (e) {
+            e.preventDefault(); // Prevent normal form submission
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirectTo; // Redirect to index page
+                    } else {
+                        // Handle failure, if needed
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error, if needed
+                }
+            });
+        });
+    });
+
 
 </script>

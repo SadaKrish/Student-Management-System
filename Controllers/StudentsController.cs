@@ -13,7 +13,7 @@ namespace sms.Controllers
 {
     public class StudentsController : Controller
     {
-        private sms_dbEntities db = new sms_dbEntities();
+        private sms_db1Entities db = new sms_db1Entities();
 
         // GET: Students
         public ActionResult Index()
@@ -147,25 +147,28 @@ namespace sms.Controllers
             }
             base.Dispose(disposing);
         }
-        public ActionResult StudentDetails(string id)
+        public ActionResult StudentDetails(string studentId)
         {
-            // Retrieve the student with the specified ID including related teachers and subjects
-            var student = db.Students
-                            .Include(s => s.Teachers)
-                            .Include(s => s.Subjects)
-                            .FirstOrDefault(s => s.StdID == id);
+            // Retrieve the student with the given studentId
+            var student = db.Students.Include(s => s.Student_Subject_Teacher_Allocation)
+                                      .SingleOrDefault(s => s.StdID == studentId);
 
             if (student == null)
             {
-                return HttpNotFound();
+                return HttpNotFound(); // Or handle the case when student is not found
             }
 
-            return PartialView("_StudentDetails", student);
-            //return View(student);
+            // Pass the student, teachers, and subjects to the view
+            ViewBag.Student = student;
+            ViewBag.Teachers = student.Student_Subject_Teacher_Allocation.Select(a => a.Teacher);
+            ViewBag.Subjects = student.Student_Subject_Teacher_Allocation.Select(a => a.Subject);
+
+            return PartialView("_StudentDetails",student);
         }
 
+
         //validation check for id
-       
+
 
     }
 }

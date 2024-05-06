@@ -11,7 +11,6 @@ namespace sms.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public partial class Student
@@ -19,34 +18,22 @@ namespace sms.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
-            this.Subjects = new HashSet<Subject>();
-            this.Teachers = new HashSet<Teacher>();
+            this.Student_Subject_Teacher_Allocation = new HashSet<Student_Subject_Teacher_Allocation>();
         }
-
-        [Required(), Display(Name = "Student ID")]
-        [Key]
-
+    
         public string StdID { get; set; }
-        [Required(), Display(Name = "First Name")]
         public string FirstName { get; set; }
-        [Required(), Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Display(Name = "Gender")]
         public string Gender { get; set; }
 
-        public DateTime? DOB { get; set; }
-
-        [Display(Name = "Address")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime DOB { get; set; }
         public string Address { get; set; }
-        [Display(Name = "Contact Number")]
         public Nullable<int> ContactNo { get; set; }
-        [Required(ErrorMessage = "Enable is required")]
-        [DisplayName("Enable")]
         public bool Enable { get; set; }
-
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Subject> Subjects { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Student_Subject_Teacher_Allocation> Student_Subject_Teacher_Allocation { get; set; }
     }
 }
